@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/eltonrustaeus-bit/eltonopt/main/assets/eltonopt-logo.png" alt="EltonOPT v3.2 — Precision Prompt Architect" width="420">
+</p>
+
 # EltonOPT v3.2 — Precision Prompt Architect
 
 A Claude Code slash command that transforms raw ideas into enterprise-grade development prompts.
