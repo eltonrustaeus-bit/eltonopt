@@ -1,8 +1,8 @@
-# EltonOPT v2 — Intelligent Prompt Architect
+# EltonOPT v3.2 — Precision Prompt Architect
 
 A Claude Code slash command that transforms raw ideas into enterprise-grade development prompts.
 
-EltonOPT automatically reads your project context (stack, dependencies, git history, conventions) and builds a fully self-contained prompt tailored to your codebase — with security risk scoring, compliance flags, and test strategy included.
+EltonOPT automatically reads your project context (stack, dependencies, git history, conventions) and builds a fully self-contained prompt tailored to your codebase — with security risk scoring, compliance flags, blast-radius analysis, and test strategy included.
 
 ## Install
 
@@ -22,39 +22,60 @@ Then restart Claude Code and run from your project root:
 /EltonOPT <your raw idea>
 ```
 
+### Mode flags
+
+```
+/EltonOPT --compact <idea>       # minimal output for small tasks
+/EltonOPT --no-questions <idea>  # one-shot, makes labeled assumptions
+/EltonOPT --dry <idea>           # debug: print detected intent + INTEL only
+```
+
 ## What it does
 
-1. **Silently scans your project** — `CLAUDE.md`, `package.json`, git log, recent files, code conventions
-2. **Classifies intent** — BUILD / DEBUG / REVIEW / ARCHITECT / OPTIMIZE / REFACTOR / MIGRATE
-3. **Scans security surface** — flags GDPR, PCI-DSS, SOC2, breaking changes, migration risk automatically
-4. **Asks one focused clarifying question**
-5. **Outputs an enterprise-grade prompt** with role, context, task, approach, constraints, test strategy, and rollback plan
+1. **Task-type gate** — routes SOFTWARE / META / NON_CODE tasks to the right-sized pipeline (no stack scan on a marketing prompt)
+2. **Silently scans your project** — `CLAUDE.md`, `package.json`, git log, recent files, code conventions (with a non-git filesystem fallback)
+3. **Classifies compound intent** — BUILD / DEBUG / REVIEW / ARCHITECT / OPTIMIZE / REFACTOR / MIGRATE / HARDEN, with precedence + negation handling
+4. **Scans security surface** — auto-flags GDPR, PCI, the full OWASP Top 10, breaking-change and migration risk
+5. **Computes blast radius** — counts importers of target files to score regression risk
+6. **Asks up to two focused clarifying questions** (structured options when applicable)
+7. **Outputs an enterprise-grade prompt** with role, context, pre-flight reads, task scope, observable success criteria, adversarial test cases, test strategy, rollback plan, and agent orchestration
 
 ## Output format
 
 ```
-⚡ EltonOPT v2 — Optimized Prompt:
+⚡ EltonOPT v3.2 — Precision Prompt:
 
 [Complete enterprise-grade prompt — fully self-contained]
 
 ---
-Mode: BUILD
-Stack: Next.js 14 + TypeScript + Supabase + Stripe
-Security Risk: HIGH — touches payment flow and user PII
-Complexity: M — 2-4 hours, 3 files, no new dependencies
-Confidence: High
+INTENT:        BUILD + HARDEN
+TASK TYPE:     SOFTWARE
+STACK:         Next.js + TypeScript + Supabase + Stripe
+SECURITY RISK: HIGH — touches payment flow and user PII
+BLAST RADIUS:  MEDIUM — 6 files
+COMPLEXITY:    M — 2-4 hours, 3 files, no new dependencies
+MODEL:         Sonnet 5 — agentic feature work at low cost
+CONFIDENCE:    High
 ```
 
-## What's new in v2
+## What's new in v3.2
 
-- **Security Risk Score** — CRITICAL / HIGH / MEDIUM / LOW on every output
-- **Compliance flags** — auto-detects GDPR, PCI-DSS, SOC2/OWASP triggers
-- **Test Strategy** — mandatory, names specific functions and endpoints to test
-- **Rollback Plan** — always included for BUILD and MIGRATE intents
-- **MIGRATE mode** — database migrations, library upgrades, API versioning
-- **Complexity estimate** — S / M / L / XL so you know scope before starting
-- **Team standards** — reads `.claude/team-standards.md` if present
-- **Generic** — works for any developer, any project, any stack
+- **Current model roster** — recommends Haiku 4.5 / **Sonnet 5** (default) / Opus 4.8 / Fable 5; blocks retired model names
+- **Task-type gate** — SOFTWARE / META / NON_CODE with a LITE pipeline for non-code work
+- **Mode flags** — `--compact`, `--full`, `--no-questions`, `--dry`
+- **Bug fixes** — blast-radius phase ordering, duplicate `OWASP_AUTHN` flag merged, four missing security-flag constraints added, Phase 6 infinite-loop capped at 2 passes, non-destructive `git revert` rollback default
+- **Non-git fallback** — architectural scan uses filesystem mtime when there's no git history
+- **Dependency-read cap** — avoids token bloat on large `package.json` files
+- **Up to two clarifying questions** — uses structured options when the choice is discrete
+
+### Carried over from earlier versions
+
+- Security Risk Score (CRITICAL / HIGH / MEDIUM / LOW) on every output
+- Mandatory Test Strategy naming specific functions and endpoints
+- Rollback Plan for BUILD and MIGRATE intents
+- Complexity estimate (S / M / L / XL)
+- Reads `.claude/team-standards.md` if present
+- Prompt-injection quarantine of all user input
 
 ## Supported stacks
 
